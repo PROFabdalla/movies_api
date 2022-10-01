@@ -1,2 +1,3 @@
-# movies_api_DJANGO
-this is movies and relations between some tables
+# movies_backend_api
+
+this is movies , Category, User, Movies, Watcher, MovieRating, WatchMovies and Entry tables and relationships between each other
