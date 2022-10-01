@@ -1,7 +1,7 @@
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import ListMovies,Moviedetais,UserList,Userdetails,EntryList,Entrydetails,CategoryList,Categorydetails,WatcherList,Watcherdetails,WatchermovieList,WatchermovieDetails,Usermovies
+from .views import ListMovies,Moviedetais,UserList,Userdetails,EntryList,Entrydetails,CategoryList,Categorydetails,WatcherList,Watcherdetails,Usermovies,MoviesRatingList,MoviesRatingDetails,UserEntries
 
 urlpatterns = [
     path('category',CategoryList.as_view(),name='categories'),
@@ -20,10 +20,18 @@ urlpatterns = [
     path('watcher/<int:pk>',Watcherdetails.as_view()),
 
 
-    path('watch_movies',WatchermovieList.as_view()),
-    path('watch_movies/<int:pk>',WatchermovieDetails.as_view()),
+    # path('watch_movies',WatchermovieList.as_view()),
+    # path('watch_movies/<int:pk>',WatchermovieDetails.as_view()),
 
     path('user_movies/<int:user_id>',Usermovies.as_view()),
+
+    path('user_rating',MoviesRatingList.as_view()),
+    path('user_rating/<int:pk>',MoviesRatingDetails.as_view()),
+
+
+    path('user_entry/<int:user_id>',UserEntries.as_view()),
+
+
 
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

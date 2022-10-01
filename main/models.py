@@ -36,36 +36,16 @@ class User(models.Model):
         movies = Movies.objects.filter(auther=self).count()
         return movies
 
+
+    def movies_views(self):
+        views_number = Watcher.objects.filter(movies__auther=self).count()
+        return views_number
+
         
 
 
     def __str__(self):
         return self.user_name
-
-
-
-
-
-class Movies(models.Model):
-    title      = models.CharField(max_length=120)
-    rating     = models.IntegerField(default=0)
-    category   = models.ForeignKey(Category,on_delete=models.CASCADE,null=True,related_name='movies_cat')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    auther     = models.ForeignKey(User,on_delete=models.CASCADE,related_name='movies',null=False)
-
-    def related_movies(self):
-        rel_movie = Movies.objects.filter(category__title__startswith=self.category).select_related("category")
-        return serializers.serialize('json',rel_movie)
-
-
-    def rating_movie(self):
-        rating_movie = MovieRating.objects.filter(movie=self).aggregate(rating_avg=models.Avg('rating'))
-        return rating_movie['rating_avg']
-
-
-    def __str__(self):
-        return self.title
 
 
 
@@ -88,8 +68,46 @@ class Watcher(models.Model):
         categries = self.favorate_cat.split(',')
         return categries
 
+
     def __str__(self):
         return self.name
+
+
+
+
+
+
+
+class Movies(models.Model):
+    title      = models.CharField(max_length=120)
+    rating     = models.IntegerField(default=0)
+    category   = models.ForeignKey(Category,on_delete=models.CASCADE,null=True,related_name='movies_cat')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    auther     = models.ForeignKey(User,on_delete=models.CASCADE,related_name='movies',null=False)
+    watcher    = models.ManyToManyField(Watcher,related_name='movies')
+
+
+
+    def related_movies(self):
+        rel_movie = Movies.objects.filter(category__title__startswith=self.category).select_related("category")
+        return serializers.serialize('json',rel_movie)
+
+
+    def rating_movie(self):
+        rating_movie = MovieRating.objects.filter(movie=self).aggregate(rating_avg=models.Avg('rating'))
+        return rating_movie['rating_avg']
+
+
+    def __str__(self):
+        return self.title
+
+
+
+
+
+
+
 
 
 class MovieRating(models.Model):
@@ -108,14 +126,14 @@ class MovieRating(models.Model):
 
 
 
-class WatchMovies(models.Model):
-    movie = models.ForeignKey(Movies,on_delete=models.CASCADE,related_name='watched_movie')
-    watcher = models.ForeignKey(Watcher,on_delete=models.CASCADE,related_name='watched_watcher')
-    watch_time = models.DateTimeField(auto_now=True)
+# class WatchMovies(models.Model):
+#     movie = models.ForeignKey(Movies,on_delete=models.CASCADE,related_name='watched_movie')
+#     watcher = models.ManyToManyField(Watcher,related_name='watched_watcher')
+#     watch_time = models.DateTimeField(auto_now=True)
 
 
-    def __str__(self):
-        return f"movie:{self.movie}--wtcher:{self.watcher}"
+#     def __str__(self):
+#         return f"movie:{self.movie}--wtcher:{self.watcher}"
 
 
 

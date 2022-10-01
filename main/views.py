@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from .models import Movies , User , Entry,Category,Watcher,WatchMovies
-from .serializer import MoviesSelializer , UserSerializer,EntrySerializer,CategorySerializer,WatcherSerializer,WatchMoviesSerializer
+from .models import Movies , User , Entry,Category,Watcher,MovieRating
+from .serializer import MoviesSelializer , UserSerializer,EntrySerializer,CategorySerializer,WatcherSerializer,MoviesRatingSeializer,UserEntrySerializer
 from rest_framework import generics
 from django.shortcuts import get_object_or_404
 
@@ -65,16 +65,34 @@ class Watcherdetails(generics.RetrieveUpdateDestroyAPIView):
 
 
 
-class WatchermovieList(generics.ListCreateAPIView):
-    serializer_class = WatchMoviesSerializer
-    queryset = WatchMovies.objects.all().select_related("movie","watcher")
+# class WatchermovieList(generics.ListCreateAPIView):
+#     serializer_class = WatchMoviesSerializer
+#     queryset = WatchMovies.objects.all().select_related("movie").prefetch_related("watcher")
 
 
 
-class WatchermovieDetails(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = WatchMoviesSerializer
-    queryset = WatchMovies.objects.all().select_related("movie","watcher")
-    # queryset = WatchMovies.objects.all().prefetch_related("movie","watcher")
+# class WatchermovieDetails(generics.RetrieveUpdateDestroyAPIView):
+#     serializer_class = WatchMoviesSerializer
+#     queryset = WatchMovies.objects.all().select_related("movie").prefetch_related("watcher")
+#     # queryset = WatchMovies.objects.all().prefetch_related("movie","watcher")
+
+
+
+
+
+
+
+
+class MoviesRatingList(generics.ListCreateAPIView):
+    serializer_class = MoviesRatingSeializer
+    queryset = MovieRating.objects.all()
+
+
+
+class MoviesRatingDetails(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = MoviesRatingSeializer
+    queryset = MovieRating.objects.all()
+
 
 
 class Usermovies(generics.ListCreateAPIView):
@@ -86,7 +104,11 @@ class Usermovies(generics.ListCreateAPIView):
 
 
 
+class UserEntries(generics.ListCreateAPIView):
+    serializer_class = UserEntrySerializer
 
+    def get_queryset(self):
+        user_id = self.kwargs['user_id']
+        user    = get_object_or_404(User,pk=user_id)
 
-
-
+        return Entry.objects.filter(auther=user).select_related("movie").prefetch_related("auther")

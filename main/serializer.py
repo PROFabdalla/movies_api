@@ -1,4 +1,3 @@
-from dataclasses import fields
 from urllib import request
 from . import models
 from rest_framework import serializers
@@ -26,7 +25,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class MoviesSelializer(serializers.ModelSerializer):
     class Meta:
         model= models.Movies
-        fields = ['id','title','rating','category','created_at','updated_at','related_movies','auther','rating_movie']
+        fields = ['id','title','rating','category','created_at','updated_at','related_movies','auther','rating_movie','watcher']
 
 
     def __init__(self, *args, **kwargs):
@@ -41,7 +40,7 @@ class MoviesSelializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.User
-        fields = ['id','user_name','email','password','user_movies']
+        fields = ['id','user_name','email','password','user_movies','movies','movies_views']
 
 
     def __init__(self,*args,**kwargs):
@@ -74,7 +73,7 @@ class EntrySerializer(serializers.ModelSerializer):
 class WatcherSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Watcher
-        fields = ['id','name','email','city','phone_num','favorate_cat','user_similar','cat_list']
+        fields = ['id','name','email','city','phone_num','favorate_cat','user_similar','cat_list','movies']
 
 
 
@@ -89,14 +88,43 @@ class WatcherSerializer(serializers.ModelSerializer):
 
 
 
-class WatchMoviesSerializer(serializers.ModelSerializer):
+# class WatchMoviesSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = models.WatchMovies
+#         fields = ['id','movie','watcher','watch_time']
+
+
+#     def __init__(self,*args,**kwargs):
+#         super(WatchMoviesSerializer,self).__init__(*args,**kwargs)
+#         request = self.context.get('request')
+#         self.Meta.depth = 0
+#         if request and request.method == 'GET':
+#             self.Meta.depth = 1
+
+
+
+class MoviesRatingSeializer(serializers.ModelSerializer):
     class Meta:
-        model = models.WatchMovies
-        fields = ['id','movie','watcher','watch_time']
+        model = models.MovieRating
+        fields = ['id','rating','review','created_at','updated_at','movie','user']
+
+    def __init__(self,*args, **kwargs):
+        super(MoviesRatingSeializer,self).__init__(*args, **kwargs)
+        request = self.context.get('request')
+        self.Meta.depth = 0
+        if request and request.method == 'GET':
+            self.Meta.depth = 1
+
+    
+class UserEntrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Entry
+        fields = ['id','header','body','created_at','updated_at','movie','auther','number_of_comments','rating','movies_comments_number']
+
 
 
     def __init__(self,*args,**kwargs):
-        super(WatchMoviesSerializer,self).__init__(*args,**kwargs)
+        super(UserEntrySerializer,self).__init__(*args,**kwargs)
         request = self.context.get('request')
         self.Meta.depth = 0
         if request and request.method == 'GET':
