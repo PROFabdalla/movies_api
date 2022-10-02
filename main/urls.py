@@ -1,7 +1,8 @@
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import ListMovies,Moviedetais,UserList,Userdetails,EntryList,Entrydetails,CategoryList,Categorydetails,WatcherList,Watcherdetails,Usermovies,MoviesRatingList,MoviesRatingDetails,UserEntries
+from .views import ListMovies,Moviedetais,UserList,Userdetails,EntryList,Entrydetails,CategoryList,Categorydetails,WatcherList,Watcherdetails,Usermovies,MoviesRatingList,MoviesRatingDetails,UserEntries,SearchMovie
+from .views import fetch_watched_movies,delet_movie
 
 urlpatterns = [
     path('category',CategoryList.as_view(),name='categories'),
@@ -30,6 +31,19 @@ urlpatterns = [
 
 
     path('user_entry/<int:user_id>',UserEntries.as_view()),
+
+
+    path('search/<searchmovie>',SearchMovie.as_view()),
+
+
+    path('fetch_watched_movies/<int:watcher_id>/<int:movie_id>',fetch_watched_movies),
+
+
+    path('delet_movie/<int:user_id>/<int:movie_id>',delet_movie),
+
+
+
+
 
 
 

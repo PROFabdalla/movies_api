@@ -1,17 +1,17 @@
 # Movies_backend_api
 
-this is Movies , Category, User, Watcher, MovieRating and Entry tables and relationships between each other
+### this is Movies , Category, User, Watcher, MovieRating and Entry tables and relationships between each other
 
-#### Movies [M] [1] Category
+##### Movies [M] [1] Category
 
-#### Movies [M] [M] Watcher
+##### Movies [M] [M] Watcher
 
-#### Movies [M] [1] User "auther"
+##### Movies [M] [1] User "auther"
 
-#### Movies [1] [M] MovieRating
+##### Movies [1] [M] MovieRating
 
-#### Movies [1] [M] Entry
+##### Movies [1] [M] Entry
 
-#### User [M] [M] Entry
+##### User [M] [M] Entry
 
-#### Watcher [1] [M] MovieRating
+##### Watcher [1] [M] MovieRating

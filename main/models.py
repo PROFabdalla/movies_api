@@ -1,4 +1,3 @@
-from pyexpat import model
 from django.db import models
 from datetime import date,time
 from django.core import serializers
@@ -26,11 +25,8 @@ class User(models.Model):
     user_name  = models.CharField(max_length=120)
     email      = models.EmailField()
     password   = models.CharField(max_length=120,blank=True,null=True)
-    # hashed = bcrypt.hashpw(password,bcrypt.gensalt())
 
-    # def count_movies_in_entries(self):
-    #     total_movies_in_entry = Movies.objects.filter(entry__auther=self).select_related("entry","entry_auther").count()
-    #     return total_movies_in_entry
+    
 
     def user_movies(self):
         movies = Movies.objects.filter(auther=self).count()
@@ -41,6 +37,10 @@ class User(models.Model):
         views_number = Watcher.objects.filter(movies__auther=self).count()
         return views_number
 
+
+    # def count_movies_in_entries(self):
+    #     total_movies_in_entry = Movies.objects.filter(entry__auther=self).select_related("entry","entry_auther").count()
+    #     return total_movies_in_entry
         
 
 
@@ -126,14 +126,14 @@ class MovieRating(models.Model):
 
 
 
-# class WatchMovies(models.Model):
-#     movie = models.ForeignKey(Movies,on_delete=models.CASCADE,related_name='watched_movie')
-#     watcher = models.ManyToManyField(Watcher,related_name='watched_watcher')
-#     watch_time = models.DateTimeField(auto_now=True)
+class WatchMovies(models.Model):
+    movie = models.ForeignKey(Movies,on_delete=models.CASCADE,related_name='watched_movie')
+    watcher = models.ManyToManyField(Watcher,related_name='watched_watcher')
+    watch_time = models.DateTimeField(auto_now=True)
 
 
-#     def __str__(self):
-#         return f"movie:{self.movie}--wtcher:{self.watcher}"
+    def __str__(self):
+        return f"movie:{self.movie}--wtcher:{self.watcher}"
 
 
 
